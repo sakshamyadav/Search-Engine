@@ -3,6 +3,7 @@
 // last modified: 9/10/2017
 
 // COMP2521 Assignment 2
+// Group: Ctrl+Alt+Elite 
 
 #include <stdlib.h>
 #include <stdio.h>
