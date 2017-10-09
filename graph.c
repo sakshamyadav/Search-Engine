@@ -10,5 +10,13 @@
 #include <string.h>
 #include "Graph.h"
 
-typedef struct Graph {
+typedef struct GraphRep {
+    int nV; // number of vertices
+    int nE; // number of edges
+} GraphRep;
+
+// create new graph
+Graph newGraph() {
+    
+}
 
