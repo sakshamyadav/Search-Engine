@@ -21,3 +21,11 @@ Graph newGraph() {
     
 }
 
+// create new node
+
+// dispose graph
+
+// show graph
+void showGraph(Graph g) {
+    assert(g! = NULL);
+}
