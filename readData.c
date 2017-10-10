@@ -11,74 +11,25 @@
 // implement breadth first traversal
 Graph read(Graph g) {
 
-    FILE *input;
-    if ((input = fopen("collection.txt","r")) == NULL) {
-        fprintf(stderr, "Couldn't open file: collection.txt");
+    FILE *fp = stdin;
+    fp = fopen("collection.txt", "r");
+    char chararr[100];
+    char **str = NULL;
+    int numURLs = 0;
+ 
+    while(fscanf(fp, "%63s", chararr) != EOF){
+        str = realloc(str, (numURLs + 1)*sizeof(*str));
+        str[numURLs] = malloc(strlen(chararr)+1);
+        strcpy(str[numURLs++], chararr);
     }
 
-    int nURLs =0;
-    int counter = 0;
-    char *str = malloc(sizeof(char *));
-    while(!feof(input) && !ferror(input)){
-        fscanf(input, "%s", str);
-        printf("%c \n", str[counter]);
-        nURLs++;
-        counter++;
-    }
-    fclose(input);
+    //Now the 'str' array contains all the URLs, we can access it normally like str[0], str[1] etc
 
-    printf("%c", str[0]);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /*while (c != EOF) {
-        if (c != ' ' || c != ) {
-
-        }
-        putchar(c);
-        printf("\n");
-        c = fgetc(input);
-    }
-    printf("")*/
-    /*while(fgets(name,21, input) != NULL) {
-        name[strlen(name)-1] = '\0';
-        url[nURLs] = strdup(name);
-        while (counter < 21) {
-            if (name[counter] == ' ' || name[counter])
-        }
-    }*/
-    // if (!= ' ' || != '\n' || != '\t')
-    
-    printf("%d\n", nURLs);
-    /*for(i = 0; i<nURLs; i++) {
-        printf("%s\n", url[i]);
-    }*/
+    return 0;
+ 
 }
 
-    /*fscanf(data,"%d",&distance) == 1) {
-		fromCity = n / ncities;
-		toCity = n % ncities;
-		// convert miles to km
-		distance = distance * 100 * 1.609344;
-		insertEdge(world, toCity, fromCity, distance);
-		n++;
-	}
-	fclose(data);*/
+
+
+
+

@@ -44,5 +44,5 @@ int main(int argc, char *argv[]) {
 }
 
 double calculatePageRank(Graph g, int d, int diffPR, int maxIt) {
-
+    return 0;
 }

@@ -29,6 +29,8 @@ Graph newGraph() {
     }
     new->nV = 0;
     new->nE = 0;
+
+    return new; 
 }
 
 // delete/ free graph
@@ -39,7 +41,7 @@ void disposeGraph(Graph g) {
 // add edges to graph
 
 int addEdge(Graph g) {
-
+    return 0;
 }
 // count amount of vertices, returns int
 int nVertices(Graph g) {
