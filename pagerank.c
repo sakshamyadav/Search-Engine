@@ -1,11 +1,20 @@
-/*
-You need to write a program in the file pagerank.c that reads data from a given collection of pages in the file collection.txt and 
-builds a graph structure using Adjacency Matrix or List Representation. 
-Using the algorithm described below, calculate Weighted PageRank for every url in the file collection.txt. 
-In this file, urls are separated by one or more spaces or/and new line character. 
-Add suffix .txt to a url to obtain file name of the corresponding "web page". 
-For example, file url24.txt contains the required information for url24.
-*/
+// pagerank.c file
+
+// program will:
+// reads data from a txt file 
+// builds graph structure with connections between files
+// adds page weight rank to each vertex of the graph using algorithm
+
+// takes in 3 arguments:
+//  d - dampening factor
+//  diffPR - difference in page rank sum
+//  maxiterations - max iterations
+
+// output in pagerankList.txt file:
+//  url name: list of urls in descending order of page rank (lowest to highest) in "%.7f"
+//  number of links each page has
+//  each value separated by a comma
+
 // Created 10/10/2017
 // last modified: 10/10/2017
 
@@ -16,6 +25,21 @@ For example, file url24.txt contains the required information for url24.
 #include <stdlib.h>
 #include <assert.h>
 
-int main() {
-  return 0;
+PageRankW(int d, int diffPR, int maxIterations);
+
+int main(int argc, char *argv[]) {
+	// read in each line of the file
+	// discern URLs from each other
+	// store URLs in an array
+	FILE *in;
+	
+	// access URLs and build graph
+	
+	// pageRank
+	
+	return 0;
+}
+
+int PageRankW(Graph g, Vertex v, int d, int diffPR, int maxIterations) {
+	// algorithm
 }
