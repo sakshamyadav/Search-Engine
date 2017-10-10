@@ -23,7 +23,10 @@ Graph newGraph() {
 
 // create new node
 
+
 // dispose graph
+void disposeGraph(Graph g) {
+    
 
 // show graph
 void showGraph(Graph g) {
