@@ -12,23 +12,35 @@
 #include "Graph.h"
 
 typedef struct GraphRep {
-    int nV; // number of vertices
-    int nE; // number of edges
+	int nV; // number of vertices
+	int nE; // number of edges
 } GraphRep;
 
 // create new graph
 Graph newGraph() {
-    
+	
 }
 
-// create new node
+// create new node or is it add new edge
 
 
 // dispose graph
 void disposeGraph(Graph g) {
-    
+	if (g == NULL) {
+		return;
+    }
+	int i;
+	// change this
+	for (i = 0; i < g->nV; i++) {
+		free(g->vertex[i]);
+	}
+	for (i = 0; i < g->maxV; i++) {
+		free(g->edges[i]);
+	}
+	free();
+}
 
-// show graph
+// show print out graph
 void showGraph(Graph g) {
     assert(g! = NULL);
 }
