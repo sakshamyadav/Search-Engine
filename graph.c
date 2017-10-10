@@ -22,7 +22,9 @@ Graph newGraph() {
 }
 
 // create new node or is it add new edge
+void addVertex(Graph g, Vertex v) {
 
+}
 
 // dispose graph
 void disposeGraph(Graph g) {
