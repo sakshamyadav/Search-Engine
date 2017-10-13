@@ -5,6 +5,8 @@
 #ifndef READ_H
 #define READ_H
 
-Graph read(Graph g);
+Graph buildGraph();
+int found(char *string, int length, char **str);
+int position(char *string, int length, char **str);
 
 #endif
