@@ -50,6 +50,10 @@ int main(int argc, char *argv[]) {
     
     //store URL names in str array
     while(fscanf(fp, "%100s", chararr) != EOF){
+
+        printf("%s\n", chararr);
+=======
+
         str = realloc(str, (numURLs + 1)*sizeof(*str));
         str[numURLs] = malloc(strlen(chararr)+1);
         strcpy(str[numURLs++], chararr);
@@ -76,6 +80,10 @@ int main(int argc, char *argv[]) {
 
     //call writeToText function to write required pageRank information to a text file
     writeToText(p, str, outgoing, numURLs);
+
+    showGraph(g);
+=======
+
 
     //success
     return 0;
@@ -142,6 +150,32 @@ double *calculatePageRank(Graph g, double d, double diffPR, int maxIt) {
 
         //update diff to diffSum
         diff = diffSum; 
+
+
+    }
+        //END WHILE
+
+        //return pointer to pageRank array  
+        return pageRank;
+}
+
+//bubble sort function to sort pageRanks in descending order
+void sort(double *pr, char **str, int out[], int length){
+    //declare temp variables for pageRank array, URL name array and outLinks array
+    int i, j;
+    double temp;
+    int temp2; 
+    char *tempStr;
+
+    for(i=0; i<length; i++){
+        for(j=i+1; j<length; j++){
+            if(pr[i]<pr[j]){
+                //swap pageRank values if pr[i] < pr[j]
+                temp = pr[i];
+                pr[i] = pr[j];
+                pr[j] = temp;
+
+
 
     }
         //END WHILE
