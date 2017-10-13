@@ -20,7 +20,11 @@ void removeEdge(Graph, Vertex, Vertex);
 
 // operations on graphs
 Graph newGraph(int nV);
+
 void disposeGraph(Graph g);
+=======
+void dropGraph(Graph);
+
 Graph makeGraph(int, int**);
 void showGraph(Graph);
 int  findPath(Graph, Vertex, Vertex, int, int *);
