@@ -146,3 +146,13 @@ double sumOutLinks(Graph g, Vertex v){
     return sum;
 }
 
+//free memory associated with graph 
+void disposeGraph(Graph g){
+    assert(g != NULL);
+    int i; 
+    for (i = 0; i < g->nV; i++) {
+        free(g->edges[i]);
+    }
+    free(g->edges);
+}
+

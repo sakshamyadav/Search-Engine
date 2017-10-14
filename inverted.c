@@ -87,6 +87,10 @@ int main(void) {
     //call function to write words and URLs to file in the right format
     writetoFile(wordArray, urlArray, nWords, numURLs);
 
+    //free memory associated with pointers
+    free(urlArray);
+    free(wordArray);
+
     //success
     return 0;
 }
@@ -121,7 +125,7 @@ void normalise(char *ch){
        		tempChar++;
        	}
 	}
-		*tempChar = '\0'; 
+	*tempChar = '\0'; 
 }
 
 //sort wordArray and urlArray in alphabetical order using a bubble sort

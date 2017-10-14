@@ -30,5 +30,6 @@ double numInLinks(Graph g, Vertex v);
 double numOutLinks(Graph g, Vertex v);
 double sumInLinks(Graph g, Vertex v);
 double sumOutLinks(Graph g, Vertex v);
+void disposeGraph(Graph g);
 
 #endif

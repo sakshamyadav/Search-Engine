@@ -63,6 +63,9 @@ Graph buildGraph() {
         }
     }
 
+    //free memory associated with pointers
+    free(str);
+
     //return graph to main function
     return g;
 

@@ -77,6 +77,12 @@ int main(int argc, char *argv[]) {
     //call writeToText function to write required pageRank information to a text file
     writeToText(p, str, outgoing, numURLs);
 
+    //free memory associated with str
+    free(str);
+
+    //dispose graph
+    disposeGraph(g);
+
     //success
     return 0;
 }
@@ -89,6 +95,7 @@ double *calculatePageRank(Graph g, double d, double diffPR, int maxIt) {
     double Nfloat = (double)N;
     double *pageRank = malloc(sizeof(double)*N);
     double oldPR[N];
+    double *temp; 
 
     //some more variables to assist in loops!
     int i, j, u, k;
@@ -148,8 +155,14 @@ double *calculatePageRank(Graph g, double d, double diffPR, int maxIt) {
     }
         //END WHILE
 
-        //return pointer to pageRank array  
-        return pageRank;
+    //store pageRank in temp 
+    temp = pageRank;
+
+    //free memory associated with pageRank 
+    free(pageRank);
+
+    //return pointer to pageRank array (stored in temp)
+    return temp;
 }
 
 //bubble sort function to sort pageRanks in descending order
