@@ -16,98 +16,83 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include <assert.h>
 #include "graph.h"
+#include "readData.h"
 #include "inverted.h"
+//include inverted.h, readData.h, graph.h
 
 #define MAX_LENGTH 100
 
-int main(int argc, char *argv[]) {
-    // open file
-    FILE *collection = stdin;
+//main function
+int main(void) {
+    // open collection.txt for reading
+    FILE *collection;
     collection = fopen("collection.txt", "r");
     
-    // read in each "URL", mostly copied from pagerank.c, could try to store in char array
+    //store url names in urlArray
     char string[MAX_LENGTH];
     char **urlArray = NULL;
     int numURLs = 0;
     while (fscanf(collection, "%s", string) != EOF) { // scan in each url
-        // store each URL in char array
-        // printf("%s\n", string);
         urlArray = realloc(urlArray, (numURLs + 1)*sizeof(*urlArray));
         urlArray[numURLs] = malloc(strlen(string)+1);
         strcpy(urlArray[numURLs++], string);
     }
     fclose(collection); // close collection.txt
-    for (int i = 0; i<numURLs; i++) { // checks
-        // printf("%d %s\n", i, urlArray[i]);
-    }
-    printf("total: %d\n", numURLs);
 
-    // going through each file and building a graph of words
+    //declare variables/file pointer for storing the words
     FILE *url;
-    // char temp[3000];
-    int nWords = 0;
-    Graph wGraph = newGraph(1);
+    int nWords = 0, i;
     int read;
     char word[MAX_LENGTH];
     char **wordArray = NULL;
-    for(int i=0; i<numURLs; i++){
-        char *currentURL = strcat(urlArray[i], ".txt");
+	char urlName[100], fileType[100];
+
+	//begin loop to store each word in every file into wordArray
+    for(i=0; i<numURLs; i++){
+    	strcpy(urlName, urlArray[i]);
+    	strcpy(fileType, ".txt");
+        char *currentURL = strcat(urlName, fileType);
         url = fopen(currentURL, "r");
-        // printf("%s\n", currentURL);
-        // find words, jump to section 2
         read = 0; // reset read for each file opened
         while (fscanf(url, "%s", word) != EOF) {
             // from Section-2 to #end
             if (strcmp(word, "#end") == 0) { // if word is #end, don't read
                 read = 0;
             }
+            //if 'word' is in the body of the URL (section-2), read it in
             if (read == 1) { // read only when 1, i.e. after 1st Section-2 is seen
-                // printf("%s\n", word);
-                // nWords++;
+            	//apply normalise function to word to remove punctuation marks and convert to lowercase
+            	normalise(word);
+            	//check to make sure that the word doesn't already exist in array
                 if (duplicates(wordArray, word, nWords) != 1) { // not duplicated
-                    printf("%s\n", word);
                     wordArray = realloc(wordArray, (nWords + 1)*sizeof(*wordArray));
                     wordArray[nWords] = malloc(strlen(word)+1);
                     strcpy(wordArray[nWords++], word);
                 }
-                /*urlArray = realloc(urlArray, (numURLs + 1)*sizeof(*urlArray));
-                urlArray[numURLs] = malloc(strlen(string)+1);
-                strcpy(urlArray[numURLs++], string);*/
             }
             if (strcmp(word, "Section-2") == 0) { // read = 1 only after 1st Section-2, for second read = 2
                 read++;
             }
         }
-        //make sure that only the outLinks of a URL are read, and not the actual contents of that 'page'
-        /*while(fscanf(fp, "%s", temp)!=EOF){
-            if(found(temp, numURLs, str)){
-                int pos = position(temp, numURLs, urlArray);
-                insertEdge(index, i, pos, TRUE);
-            }
-        }
-        */
-        
-        //close file
+   		//close file
         fclose(url);
     }
-    printf("%d\n", nWords);
-    showGraph(wGraph);
 
-    printf("Create File\n");
+    //call the function to sort wordArray and urlArray in alphabetiacl order
+    sortAlpha(wordArray, urlArray, nWords, numURLs);
 
+    //call function to write words and URLs to file in the right format
+    writetoFile(wordArray, urlArray, nWords, numURLs);
 
-    // output 
-    FILE *new;
-    new = fopen("invertedIndex.txt", "w");
-    // print graph function
-    fclose(new);
+    //success
     return 0;
 }
 
-// check for if the current string is already in the string array
-// return 0 if not found, else 1
+
+//check for duplicates - make sure word doesn't already exist in array
 int duplicates(char **str, char *in, int size) {
     int i;
     for (i = 0; i < size; i++) {
@@ -117,16 +102,95 @@ int duplicates(char **str, char *in, int size) {
     }
     return 0;
 }
-// normalise words function
-// removes leading and trailing spaces,
-// convert all chars to lowercase,
-// remove punctuation marks at end of words
-// '.', ',', ';', ?
 
-/*void normalise(char *in, char *out) {
-    char *c;
-    if (tolower()
-    strcpy(out,in);
-}*/
+//normalise function - convert all characters to lowercase and remove punctuation marks
+void normalise(char *ch){
+	int i;
+	char *tempChar, *tempStr;
 
-// mars  url25 url31 url101
+	//convert each word to lowercase
+	for(i=0; i<strlen(ch); i++){
+		ch[i] = tolower(ch[i]);
+	}
+	
+	//remove ".", ",", "?", ";" characters
+	tempStr = tempChar = ch;
+	while(*tempStr){
+		*tempChar = *tempStr++;
+       	if((*tempChar != '.' && *tempChar != ','  && *tempChar != ';'  && *tempChar != '?' && *tempChar != ' ' )){
+       		tempChar++;
+       	}
+	}
+		*tempChar = '\0'; 
+}
+
+//sort wordArray and urlArray in alphabetical order using a bubble sort
+void sortAlpha(char **str, char **url, int length, int urlLength){
+	int i, j; 
+	char *temp;
+
+	//sort wordArray in alphabetical order
+	for(i=0; i<length; i++){
+		for(j=i+1; j<length; j++){
+			if(strcmp(str[i], str[j])>0){
+				temp = str[i];
+				str[i] = str[j];
+				str[j] = temp;
+			}
+		}
+	}
+
+	//sort urlArray in alphabetical order
+	for(i=0; i<urlLength; i++){
+		for(j=i+1; j<urlLength; j++){
+			if(strcmp(url[i], url[j])>0){
+				temp = url[i];
+				url[i] = url[j];
+				url[j] = temp;
+			}
+		}
+	}		
+}
+
+//write words and URLs to file 
+void writetoFile(char **str, char **url, int length, int urlLength){
+	int i, j; 
+	FILE *fp; 
+	//open file for writing
+	FILE *write = fopen("invertedIndex.txt", "w");
+
+	//begin loop for each word 
+	for(i=0; i<length; i++){
+		//write the current word to file
+		fprintf(write, "%s ", str[i]);
+		//begin loop for each URL
+		for(j=0; j<urlLength; j++){
+			char urlName[100], fileType[100], temp[3000];
+        	strcpy(urlName, url[j]);
+        	strcpy(fileType, ".txt");
+        	char *current = strcat(urlName,fileType);
+
+        	//open URL for reading
+        	fp = fopen(current, "r");
+
+        	while(fscanf(fp, "%s", temp)!=EOF){
+        		//apply normalise function to word for comparison 
+        		normalise(temp);
+        		//if the word being read is equal to the word currently being compared against, then the word exists in this URL - so write it to file
+            	if(strcmp(temp, str[i])==0){
+            		//write word to file 
+                	fprintf(write, "%s ", url[j]);
+                	break;
+            	}
+        	}
+        	//close URL file
+        	fclose(fp);
+		}
+		//write a newline at the end of each loop until last word is reached 
+		if(i != length-1){
+			fprintf(write, "\n");
+		}
+	}
+	//close invertedIndex file (the one being written to)
+	fclose(write);
+}

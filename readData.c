@@ -14,7 +14,7 @@
 Graph buildGraph() {
 
     //open file for reading
-    FILE *fp = stdin;
+    FILE *fp;
     fp = fopen("collection.txt", "r");
     char chararr[100];
     char **str = NULL;
