@@ -110,6 +110,8 @@ double *calculatePageRank(Graph g, double d, double diffPR, int maxIt) {
     while(iterations<maxIt && diff >= diffPR){
         //increment the number of iterations by 1
         iterations++;
+        //reset value of diffSum for each iteration
+        diffSum = 0;
 
         //update old pageRank array
         for(u=0; u<N; u++){
@@ -135,9 +137,9 @@ double *calculatePageRank(Graph g, double d, double diffPR, int maxIt) {
 
         }
 
-        //update value of diffSum for the while loop condition
+        //update value of diffSum 
         for(k=0; k<N; k++){
-            diffSum = fabs(pageRank[k] - oldPR[k]);
+            diffSum = diffSum + fabs(pageRank[k] - oldPR[k]);
         }
 
         //update diff to diffSum
