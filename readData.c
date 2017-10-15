@@ -23,8 +23,8 @@ Graph buildGraph() {
     
     //read URL names to str array
     while(fscanf(fp, "%100s", chararr) != EOF){
-        str = realloc(str, (numURLs + 1)*sizeof(*str));
-        str[numURLs] = malloc(strlen(chararr)+1);
+        str = realloc(str, 50000);
+        str[numURLs] = malloc(50000);
         strcpy(str[numURLs++], chararr);
     }
 
@@ -64,7 +64,7 @@ Graph buildGraph() {
     }
 
     //free memory associated with pointers
-    free(str);
+    freePointer(str, numURLs);
 
     //return graph to main function
     return g;
@@ -91,4 +91,15 @@ int position(char *string, int length, char **str){
         }
     }
     return 0; 
+}
+
+//this function is used to free all memory associated with pointers
+void freePointer(char **ptr, int length){
+    int i; 
+
+    for(i=0; ptr[i]; i++){
+        free(ptr[i]);
+    }
+
+    free(ptr);
 }

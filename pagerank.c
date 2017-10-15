@@ -50,8 +50,8 @@ int main(int argc, char *argv[]) {
     
     //store URL names in str array
     while(fscanf(fp, "%100s", chararr) != EOF){
-        str = realloc(str, (numURLs + 1)*sizeof(*str));
-        str[numURLs] = malloc(strlen(chararr)+1);
+        str = realloc(str, 50000);
+        str[numURLs] = malloc(50000);
         strcpy(str[numURLs++], chararr);
     }
     //close file
@@ -78,7 +78,7 @@ int main(int argc, char *argv[]) {
     writeToText(p, str, outgoing, numURLs);
 
     //free memory associated with str
-    free(str);
+    freePointer(str, numURLs);
 
     //dispose graph
     disposeGraph(g);

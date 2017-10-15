@@ -8,5 +8,6 @@
 Graph buildGraph();
 int found(char *string, int length, char **str);
 int position(char *string, int length, char **str);
+void freePointer(char **ptr, int length); 
 
 #endif

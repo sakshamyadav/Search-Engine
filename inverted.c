@@ -36,8 +36,8 @@ int main(void) {
     char **urlArray = NULL;
     int numURLs = 0;
     while (fscanf(collection, "%s", string) != EOF) { // scan in each url
-        urlArray = realloc(urlArray, (numURLs + 1)*sizeof(*urlArray));
-        urlArray[numURLs] = malloc(strlen(string)+1);
+        urlArray = realloc(urlArray, 50000);
+        urlArray[numURLs] = malloc(50000);
         strcpy(urlArray[numURLs++], string);
     }
     fclose(collection); // close collection.txt
@@ -68,8 +68,8 @@ int main(void) {
             	normalise(word);
             	//check to make sure that the word doesn't already exist in array
                 if (duplicates(wordArray, word, nWords) != 1) { // not duplicated
-                    wordArray = realloc(wordArray, (nWords + 1)*sizeof(*wordArray));
-                    wordArray[nWords] = malloc(strlen(word)+1);
+                    wordArray = realloc(wordArray, 50000);
+                    wordArray[nWords] = malloc(50000);
                     strcpy(wordArray[nWords++], word);
                 }
             }
@@ -89,8 +89,8 @@ int main(void) {
     writetoFile(wordArray, urlArray, nWords, numURLs);
 
     //free memory associated with pointers
-    free(urlArray);
-    free(wordArray);
+    freePointer(urlArray, numURLs);
+    freePointer(wordArray, nWords);
 
     //success
     return 0;
