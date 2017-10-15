@@ -7,6 +7,6 @@
 int duplicates(char **str, char *in, int size);
 void normalise(char *ch);
 void writetoFile(char **str, char **url, int length, int urlLength);
-void sortAlpha(char **str, char **url, int length, int urlLength);
+void sortAlpha(char **str, int length);
 
 #endif

@@ -82,7 +82,8 @@ int main(void) {
     }
 
     //call the function to sort wordArray and urlArray in alphabetiacl order
-    sortAlpha(wordArray, urlArray, nWords, numURLs);
+    sortAlpha(wordArray, nWords);
+    sortAlpha(urlArray, numURLs);
 
     //call function to write words and URLs to file in the right format
     writetoFile(wordArray, urlArray, nWords, numURLs);
@@ -129,7 +130,7 @@ void normalise(char *ch){
 }
 
 //sort wordArray and urlArray in alphabetical order using a bubble sort
-void sortAlpha(char **str, char **url, int length, int urlLength){
+void sortAlpha(char **str, int length){
 	int i, j; 
 	char *temp;
 
@@ -143,17 +144,6 @@ void sortAlpha(char **str, char **url, int length, int urlLength){
 			}
 		}
 	}
-
-	//sort urlArray in alphabetical order
-	for(i=0; i<urlLength; i++){
-		for(j=i+1; j<urlLength; j++){
-			if(strcmp(url[i], url[j])>0){
-				temp = url[i];
-				url[i] = url[j];
-				url[j] = temp;
-			}
-		}
-	}		
 }
 
 //write words and URLs to file 
