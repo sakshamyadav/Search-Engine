@@ -37,8 +37,6 @@ int main(int argc, char *argv[]) {
     double dampener = atof(argv[1]);
     double diffPRsum = atof(argv[2]);
     int maxIt = atoi(argv[3]);
-    //pointer to pageRank array
-    double *p;
 
     //open collection.txt to read URL names
     FILE *fp;
@@ -63,6 +61,9 @@ int main(int argc, char *argv[]) {
     //create a graph by calling the buildGraph function
     Graph g = buildGraph();
 
+    //pointer to pageRank array
+    double *p = malloc(sizeof(double)*getnumV(g));
+
     //call calculatePageRank function to calculate the pageRank for each URL. p is the pointer to the array returned by the function
     p = calculatePageRank(g, dampener, diffPRsum, maxIt);
 
@@ -77,8 +78,9 @@ int main(int argc, char *argv[]) {
     //call writeToText function to write required pageRank information to a text file
     writeToText(p, str, outgoing, numURLs);
 
-    //free memory associated with str
+    //free memory associated with str and p
     freePointer(str, numURLs);
+    free(p);
 
     //dispose graph
     disposeGraph(g);
@@ -95,7 +97,6 @@ double *calculatePageRank(Graph g, double d, double diffPR, int maxIt) {
     double Nfloat = (double)N;
     double *pageRank = malloc(sizeof(double)*N);
     double oldPR[N];
-    double *temp; 
 
     //some more variables to assist in loops!
     int i, j, u, k;
@@ -153,16 +154,9 @@ double *calculatePageRank(Graph g, double d, double diffPR, int maxIt) {
         diff = diffSum; 
 
     }
-        //END WHILE
 
-    //store pageRank in temp 
-    temp = pageRank;
-
-    //free memory associated with pageRank 
-    free(pageRank);
-
-    //return pointer to pageRank array (stored in temp)
-    return temp;
+    //return pointer to pageRank array 
+    return pageRank;
 }
 
 //bubble sort function to sort pageRanks in descending order
