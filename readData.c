@@ -23,8 +23,8 @@ Graph buildGraph() {
     
     //read URL names to str array
     while(fscanf(fp, "%100s", chararr) != EOF){
-        str = realloc(str, 50000);
-        str[numURLs] = malloc(50000);
+        str = realloc(str, (numURLs+1)*sizeof(char*));
+        str[numURLs] = malloc(strlen(chararr)+1);
         strcpy(str[numURLs++], chararr);
     }
 
@@ -97,7 +97,7 @@ int position(char *string, int length, char **str){
 void freePointer(char **ptr, int length){
     int i; 
 
-    for(i=0; ptr[i]; i++){
+    for(i=0; i<length; i++){
         free(ptr[i]);
     }
 

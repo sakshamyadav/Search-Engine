@@ -41,16 +41,16 @@ int main(int argc, char *argv[]) {
 	for(i=0; i<argc-1; i++){
 		FILE *fp = fopen("invertedIndex.txt", "r");
 		normaliseInput(argv[i+1]);
-        wordArray = realloc(wordArray, 50000);
-        wordArray[nWords] = malloc(50000);
+        wordArray = realloc(wordArray, (nWords+1)*sizeof(char*));
+        wordArray[nWords] = malloc(strlen(argv[i])+1);
         strcpy(wordArray[nWords++],argv[i+1]);
 
         //when a word from command line is found, store it's URLs in urlArray
 		while(fscanf(fp, "%99s", string)==1){
 			if(strcmp(wordArray[i], string)==0){
 				while (fscanf ( fp, "%99s%99[ \t\n]", string, newLine)==2){
-                    urlArray = realloc(urlArray, 50000);
-                    urlArray[numURLs] = malloc(50000);
+                    urlArray = realloc(urlArray, (numURLs+1)*sizeof(char*));
+                    urlArray[numURLs] = malloc(strlen(string)+1);
                     strcpy(urlArray[numURLs++], string);
 
 					if(strchr(newLine, '\n')){
@@ -67,8 +67,8 @@ int main(int argc, char *argv[]) {
 	getFreq(urlArray, numURLs);
 
 	//free memory associated with wordArray and urlArray
-	free(wordArray);
-	free(urlArray);
+	freePointer(wordArray, nWords);
+	freePointer(urlArray, numURLs);
 
 	//success
     return 0;
@@ -99,8 +99,8 @@ void normaliseInput(char *ch){
 void getFreq(char **arr, int length){
 	int i, j, count; 
 	int freq[length]; 
-	char **urlHold = malloc(sizeof(char)*50000);
-	int *freqHold = malloc(sizeof(int)*50000);
+	char **urlHold = NULL;
+	int *freqHold = malloc(sizeof(int)*length);
 	int counter = 0;
 
 	//set initial frequency of each URL to -1
@@ -125,7 +125,9 @@ void getFreq(char **arr, int length){
 	//transfer data from arr and freq pointers to urlHold and freqHold dynamic structures
 	for(i=0; i<length; i++){
         if(freq[i] != 0){
-            urlHold[counter] = arr[i];
+        	urlHold = realloc(urlHold, (counter+1)*sizeof(char*));
+        	urlHold[counter] = malloc(strlen(arr[i])+1);
+            strcpy(urlHold[counter], arr[i]);
             freqHold[counter] = freq[i];
             counter++;
         }
@@ -139,7 +141,7 @@ void getFreq(char **arr, int length){
 
     //free data associated with freqHold and urlHold
     free(freqHold);
-    free(urlHold);
+    freePointer(urlHold, counter);
 }
 
 //order function to rank from high to low frequency using bubble sort
@@ -163,6 +165,7 @@ void order(char **arr, int *freq, int length){
         	}
     	}
 	}
+
 }
 
 //function to print to console
@@ -189,8 +192,8 @@ void consolePrint(char **arr, int *freq, int length){
 				break;
 			}
 			//store the URLs corresponding to this frequency set in temp data structure
-			temp= realloc(temp, 50000);
-			temp[tempCounter] = malloc(50000);
+			temp= realloc(temp, (tempCounter+1)*sizeof(char*));
+			temp[tempCounter] = malloc(strlen(arr[j])+1);
 			strcpy(temp[tempCounter++],arr[j]); 
 			//set frequency to -1 to mark as 'seen'
 			freq[j] = -1;
@@ -199,8 +202,8 @@ void consolePrint(char **arr, int *freq, int length){
 		sortpageRank(temp, tempCounter);
 		//store the sorted frequency set in the 'main' data structure, following previous frequency sets
 		for(k=0; k<tempCounter; k++){
-			main = realloc(main, 50000);
-			main[mainCounter] = malloc(50000);
+			main = realloc(main, (mainCounter+1)*sizeof(char*));
+			main[mainCounter] = malloc(strlen(temp[k])+1);
 			strcpy(main[mainCounter++], temp[k]);
 		}
 
@@ -218,6 +221,10 @@ void consolePrint(char **arr, int *freq, int length){
 			printf("%s\n", main[i]);
 		}	
 	}
+
+	//free memory associated with main and temp pointers
+	freePointer(main, mainCounter);
+	freePointer(temp, tempCounter);
 }
 
 //determine the maximum frequency URL
@@ -264,7 +271,7 @@ void sortpageRank(char **arr, int length){
 	int i, j; 
 	char string[3000];
 	char newLine[3000];
-	double *prValues = malloc(sizeof(double)*50000);
+	double *prValues = malloc(sizeof(double)*length);
 	int prCount = 0;
 	double temp; 
 	char *tempStr; 
@@ -308,6 +315,7 @@ void sortpageRank(char **arr, int length){
 
 	//free prValues memory
 	free(prValues);
+
 }
 
 
