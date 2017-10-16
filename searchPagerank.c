@@ -175,8 +175,8 @@ void consolePrint(char **arr, int *freq, int length){
 	int distinct = getDistinct(freq, length);
 	char **temp = NULL;
 	int start = 0;
-	char **main = NULL; 
-	int mainCounter = 0; 
+	char **output = NULL; 
+	int outputCounter = 0; 
 
 	//loop for each frequency set (e.g. set of 10 occurrences, 5 occurences etc)
 	for(i=0; i<distinct; i++){
@@ -200,30 +200,30 @@ void consolePrint(char **arr, int *freq, int length){
 		}
 		//sort the frequency set based on pagerank value
 		sortpageRank(temp, tempCounter);
-		//store the sorted frequency set in the 'main' data structure, following previous frequency sets
+		//store the sorted frequency set in the 'output' data structure, following previous frequency sets
 		for(k=0; k<tempCounter; k++){
-			main = realloc(main, (mainCounter+1)*sizeof(char*));
-			main[mainCounter] = malloc(strlen(temp[k])+1);
-			strcpy(main[mainCounter++], temp[k]);
+			output = realloc(output, (outputCounter+1)*sizeof(char*));
+			output[outputCounter] = malloc(strlen(temp[k])+1);
+			strcpy(output[outputCounter++], temp[k]);
 		}
 
 	}
 
 	//if number of pages returned by this algorithm is less than 30, display all
-	if(mainCounter<30){
-		for(i=0; i<mainCounter; i++){
-			printf("%s\n", main[i]);
+	if(outputCounter<30){
+		for(i=0; i<outputCounter; i++){
+			printf("%s\n", output[i]);
 		}
 	}
 	//if there are 30 or more pages, only display 30
 	else{
 		for(i=0; i<30; i++){
-			printf("%s\n", main[i]);
+			printf("%s\n", output[i]);
 		}	
 	}
 
-	//free memory associated with main and temp pointers
-	freePointer(main, mainCounter);
+	//free memory associated with output and temp pointers
+	freePointer(output, outputCounter);
 	freePointer(temp, tempCounter);
 }
 
