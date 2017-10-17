@@ -27,7 +27,7 @@ void normalise(char *ch);
 double calculateTF(char *str, char *wordArray); 
 double calculateIDF(char *word, int totalDocs);
 int getFreq(char *url, char **wordArray, int size);
-void order(char **array, double *tfidf, int *freq);
+void order(char **array, double *tfidf, int *freq, int size);
 
 int main(int argc, char *argv[]) {
 
@@ -111,9 +111,9 @@ int main(int argc, char *argv[]) {
     }*/
     
     // ordering thingy goes here, order based on frequency first, then tfidf values
-    order(urlArray, tfidf, frequency);
-
-    for (int final = 0; final < totalURLs; final++) {
+    order(urlArray, tfidf, frequency, totalURLs);
+    int final;
+    for (final = 0; final < totalURLs; final++) {
         if (frequency[final] != 0) {
             printf("%s  %.6f\n", urlArray[final], tfidf[final]);
         }
@@ -238,20 +238,6 @@ int getFreq(char *url, char **wordArray, int size) {
     return count;
 }
 
-// check if the string array already has a string
-int duplicates(char **str, char *in, int size) {
-    if (str == NULL) {
-        return 0;
-    }
-    int i;
-    for (i = 0; i < size; i++) {
-        if (strcmp(str[i], in) == 0) {
-            return 1;
-        }
-    }
-    return 0;
-}
-
 //normalise function - convert all characters to lowercase and remove punctuation marks
 void normalise(char *ch) {
 	int i;
@@ -271,6 +257,31 @@ void normalise(char *ch) {
 	*tempChar = '\0'; 
 }
 
-void order(char **array, double *tfidf, int *freq) {
+// orders array in specific order as requested, with extra sauce and no gravy
+void order(char **arr, double *tfidf, int *freq, int length) {
+    // order in descending order, those with higher frequencies are at top, lower at bottom
+   int i,j, temp, temp1;
+    char *temp2; 
 
+    for(i=0; i<length; i++){
+        for(j=i+1; j<length; j++){
+            if(freq[i]<freq[j]){
+                
+                //swap frequency value
+                temp = freq[i];
+                freq[i] = freq[j];
+                freq[j] = temp;
+
+                //swap URL name to maintain correct order
+                temp2 = arr[i];
+                arr[i] = arr[j];
+                arr[j] = temp2;
+
+                // swap tfidf to maintain order
+                temp1 = tfidf[i];
+                tfidf[i] = tfidf[j];
+                tfidf[j] = temp1;
+            }
+        }
+    }
 }
