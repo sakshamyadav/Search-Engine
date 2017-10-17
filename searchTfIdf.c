@@ -27,6 +27,7 @@ void normalise(char *ch);
 double calculateTF(char *str, char *wordArray); 
 double calculateIDF(char *word, int totalDocs);
 int getFreq(char *url, char **wordArray, int size);
+void order(char **array, double *tfidf, int *freq);
 
 int main(int argc, char *argv[]) {
 
@@ -100,9 +101,24 @@ int main(int argc, char *argv[]) {
         n = 0;
         m++;
     }
-    for (int g = 0; g < totalURLs; g++) {
-        printf("%s  %.6lf %d\n", urlArray[g], tfidf[g], frequency[g]);
+
+
+    // so far calucalted frequency values and tf-idf and have urlArray
+    /*for (int g = 0; g < totalURLs; g++) {
+        if (frequency[g] != 0) {
+            printf("%s  %.6f %d\n", urlArray[g], tfidf[g], frequency[g]);
+        }
+    }*/
+    
+    // ordering thingy goes here, order based on frequency first, then tfidf values
+    order(urlArray, tfidf, frequency);
+
+    for (int final = 0; final < totalURLs; final++) {
+        if (frequency[final] != 0) {
+            printf("%s  %.6f\n", urlArray[final], tfidf[final]);
+        }
     }
+
     return 0;
 }
 
@@ -114,10 +130,11 @@ int main(int argc, char *argv[]) {
 double calculateTF(char *str, char *wordArray) {
     // finding frequency of the search term in the current document
     double frequency = 0;
-    if (strstr(str, ".txt") == NULL) {
-        strcat(str, ".txt");
-    }
-    FILE *url1 = fopen(str, "r");
+    char urlname[MAX_LENGTH], filetype[MAX_LENGTH];
+    strcpy(urlname, str);
+    strcpy(filetype, ".txt");
+    char *current = strcat(urlname, filetype);
+    FILE *url1 = fopen(current, "r");
     char word1[MAX_LENGTH];
     while (fscanf(url1, "%s", word1) != EOF) {
         normalise(word1);
@@ -126,13 +143,13 @@ double calculateTF(char *str, char *wordArray) {
         }
     }
     fclose(url1);
-    // printf("word: %lf\n", frequency);
+    // printf("word: %lf ", frequency);
     // finding number of words in file, only words in section 2
     int nWords = 0;
     double total = 0;
     int read = 0;
     char word2[MAX_LENGTH];
-    FILE *url2 = fopen(str, "r");
+    FILE *url2 = fopen(current, "r");
     while (fscanf(url2, "%s", word2) != EOF) {
         // from Section-2 to #end
         if (strcmp(word2, "#end") == 0) { // if word is #end, don't read
@@ -153,6 +170,7 @@ double calculateTF(char *str, char *wordArray) {
     // printf("total: %lf\n", total);
     if (total > 0) {
         double tf = frequency/total;
+        // printf("TF: %lf\n", tf);
         return tf;
     }
     return 0;
@@ -180,11 +198,12 @@ double calculateIDF(char *word, int totalDocs) {
 		}
 	}
     free(temp);
-    // printf("nDocs: %d\n", nDocs);
+    // printf("nDocs: %d ", nDocs);
     // find total amount of documents
     // printf("TotalDocs: %d\n", totalDocs);
     if (nDocs > 0) {
-        double IDF = log((float)totalDocs/nDocs); 
+        double IDF = log10((float)totalDocs/nDocs); 
+        // printf("IDF: %lf\n", IDF);
         return IDF;
     }
     return 0;
@@ -193,21 +212,23 @@ double calculateIDF(char *word, int totalDocs) {
 // how many times do the query terms appear in the given URL
 int getFreq(char *url, char **wordArray, int size) {
     int count = 0;
-    if (strstr(url, ".txt") == NULL) {
-        strcat(url, ".txt");
-    }
+    char urlname[MAX_LENGTH], filetype[MAX_LENGTH];
+    strcpy(urlname, url);
+    strcpy(filetype, ".txt");
+    char *current = strcat(urlname, filetype);
+    
     int i = 0;
     char string[MAX_LENGTH];
     int found = 0;
     while (i < size) {
-        printf("find: %s\n", wordArray[i]);
-        FILE *open = fopen(url, "r");
+        // printf("find: %s\n", wordArray[i]);
+        FILE *open = fopen(current, "r");
         while (fscanf(open, "%s", string) != EOF && found != 1) {
             normalise(string);
             if (strcmp(wordArray[i], string) == 0) {
                 count++;
                 found = 1;
-                printf("Found!\n");
+                // printf("Found!\n");
             }
         }
         found = 0;
@@ -248,4 +269,8 @@ void normalise(char *ch) {
        	}
 	}
 	*tempChar = '\0'; 
+}
+
+void order(char **array, double *tfidf, int *freq) {
+
 }
