@@ -49,7 +49,7 @@ int main(int argc, char *argv[]) {
     //store URL names in str array
     while(fscanf(fp, "%100s", chararr) != EOF){
         str = realloc(str, (numURLs+1)*sizeof(char*));
-        str[numURLs] = malloc(sizeof(chararr)+1);
+        str[numURLs] = malloc(strlen(chararr)+1);
         strcpy(str[numURLs++], chararr);
     }
     //close file

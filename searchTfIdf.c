@@ -17,6 +17,7 @@
 #include <ctype.h>
 #include <math.h>
 #include "graph.h"
+#include "readData.h"
 
 #define MAX_PAGES 30
 #define MAX_LENGTH 2401
@@ -30,6 +31,7 @@ double calculateIDF(char *word, int totalDocs);
 int getFreq(char *url, char **wordArray, int size);
 void order(char **array, double *tfidf, int *freq, int size);
 
+//main function start
 int main(int argc, char *argv[]) {
 
     // error message
@@ -38,63 +40,53 @@ int main(int argc, char *argv[]) {
         exit(1);
     }
     
-    // storing search terms into an word array
+    // storing search terms into a word array
     int i = 1;
     int nWords = 0;
     char **wordArray = NULL;
     while (i < argc) {
         normalise(argv[i]);
-        wordArray = realloc(wordArray, 50000);
-        wordArray[nWords] = malloc(50000);
+        wordArray = realloc(wordArray, (nWords+1)*sizeof(char*));
+        wordArray[nWords] = malloc(strlen(argv[i])+1);
         strcpy(wordArray[nWords++],argv[i]);
         i++;
     }
+
     int totalWords = nWords;
-    /*for (int a = 0; a < totalWords; a++) {
-        printf("%s\n", wordArray[a]);
-    }*/
-    // words stored in wordsArray
-    
-    // now get every url from collection.txt
+
+    //storing url names into urlArray
     int numURLs = 0;
     char **urlArray = NULL;
     char string[MAX_LENGTH];
     FILE *url = fopen("collection.txt", "r");
     while (fscanf(url, "%s", string) != EOF) {
-        urlArray = realloc(urlArray, 50000);
-        urlArray[numURLs] = malloc(50000);
+        urlArray = realloc(urlArray, (numURLs+1)*sizeof(char*));
+        urlArray[numURLs] = malloc(strlen(string)+1);
         strcpy(urlArray[numURLs++], string);
     }
     int totalURLs = numURLs;
-    /*for (int b = 0; b < numURLs; b++) {
-        printf("%s\n", urlArray[b]);
-    }*/
-    // urls in urlArray
 
-    // going through each url, find tf and idf for each query and store in array
-    // also store frequency in an array corresponding to URL position
-    // search terms, mars, design, moon
-    // for e.g. url31
-    // both mars and design appear 0 times but moon appears once, total 7 words
-    // 0/7, 0/7, 1/7
-    // idf = mars- log(7/6), design- log(7/2), moon- log(7/5)
-    // url31 tf-idf = 0*log(7/6) + 0*log(7/2) + (1/7)*log(7/5), 1 out of 3 search terms appeared, freq[0] = 1;
+    //close file
+    fclose(url);
     
-    int frequency[totalURLs]; // frequency of search terms in url corresponding to index
+    // initialise frequency of search terms to 0 
+    int frequency[totalURLs]; 
     for (int c = 0; c < totalURLs; c++) {
         frequency[c] = 0;
     }
 
+    //initialise tf-idf values to 0 
     double tfidf[totalURLs];
     for (int d = 0; d < totalURLs; d++) {
-        frequency[d] = 0;
+        tfidf[d] = 0;
     }
 
     int m = 0;
     int n = 0;
+
+    //determine tf-idf and frequency values 
     while (m < totalURLs) {
         while (n < totalWords) {
-            // printf("%d, %s %s\n", m, urlArray[m], wordArray[n]);
             tfidf[m] = tfidf[m] + calculateTF(urlArray[m], wordArray[n])*calculateIDF(wordArray[n], totalURLs);
             n++;
         }
@@ -104,22 +96,21 @@ int main(int argc, char *argv[]) {
     }
 
 
-    // so far calucalted frequency values and tf-idf and have urlArray
-    /*for (int g = 0; g < totalURLs; g++) {
-        printf("%s  %.6f %d\n", urlArray[g], tfidf[g], frequency[g]);
-    }
-    
-    printf("\n");*/
-
-    // ordering thingy goes here, order based on frequency first, then tfidf values
+    //call order function to order based on frequency first, then tfidf values
     order(urlArray, tfidf, frequency, totalURLs);
     int final = 0;
+
+    //output the URLs, along with corresponding tf-idf value
     while (final < MAX_URL && final < totalURLs) {
         if (frequency[final] != 0) {
             printf("%s  %.6f\n", urlArray[final], tfidf[final]);
         }
         final++;
     }
+
+    //free memory associated with wordArray and urlArray
+    freePointer(wordArray, nWords);
+    freePointer(urlArray, numURLs);
 
     return 0;
 }
@@ -130,6 +121,7 @@ int main(int argc, char *argv[]) {
 // takes in the url, the word
 // returns the TF of th word in the url
 double calculateTF(char *str, char *wordArray) {
+
     // finding frequency of the search term in the current document
     double frequency = 0;
     char urlname[MAX_LENGTH], filetype[MAX_LENGTH];
@@ -144,10 +136,10 @@ double calculateTF(char *str, char *wordArray) {
             frequency = frequency + 1;
         }
     }
+    //close file
     fclose(url1);
-    // printf("word: %lf ", frequency);
-    // finding number of words in file, only words in section 2
-    int nWords = 0;
+
+    //read number of words in each URL
     double total = 0;
     int read = 0;
     char word2[MAX_LENGTH];
@@ -167,12 +159,12 @@ double calculateTF(char *str, char *wordArray) {
             read = read + 1;
         }
     }
+    //close file
     fclose(url2);
-    // strcpy(str, urlString);
-    // printf("total: %lf\n", total);
+
+    //return term frequency 
     if (total > 0) {
         double tf = frequency/total;
-        // printf("TF: %lf\n", tf);
         return tf;
     }
     return 0;
@@ -188,30 +180,28 @@ double calculateIDF(char *word, int totalDocs) {
     char **temp = NULL;
     FILE *inverted = fopen("invertedIndex.txt", "r");
     while (fscanf(inverted, "%s", string) != EOF) {
-		if (strcmp(word, string) == 0) {
-			while (fscanf(inverted, "%99s%99[ \t\n]", string, newLine) == 2) {
-                temp = realloc(temp, 50000);
-                temp[nDocs] = malloc(50000);
+        if (strcmp(word, string) == 0) {
+            while (fscanf(inverted, "%99s%99[ \t\n]", string, newLine) == 2) {
+                temp = realloc(temp, (nDocs+1)*sizeof(char*));
+                temp[nDocs] = malloc(strlen(string)+1);
                 strcpy(temp[nDocs++], string);
-				if (strchr(newLine, '\n')) {
-					break;
-				}
-			}
-		}
-	}
-    free(temp);
-    // printf("nDocs: %d ", nDocs);
+                if (strchr(newLine, '\n')) {
+                    break;
+                }
+            }
+        }
+    }
+    //free memory associate with temp 
+    freePointer(temp, nDocs);
     // find total amount of documents
-    // printf("TotalDocs: %d\n", totalDocs);
     if (nDocs > 0) {
         double IDF = log10((double)totalDocs/nDocs); 
-        // printf("IDF: %lf\n", IDF);
         return IDF;
     }
     return 0;
 }
 
-// how many times do the query terms appear in the given URL
+// find how many times do the query terms appear in the given URL
 int getFreq(char *url, char **wordArray, int size) {
     int count = 0;
     char urlname[MAX_LENGTH], filetype[MAX_LENGTH];
@@ -222,15 +212,14 @@ int getFreq(char *url, char **wordArray, int size) {
     int i = 0;
     char string[MAX_LENGTH];
     int found = 0;
+    //check if found 
     while (i < size) {
-        // printf("find: %s\n", wordArray[i]);
         FILE *open = fopen(current, "r");
         while (fscanf(open, "%s", string) != EOF && found != 1) {
             normalise(string);
             if (strcmp(wordArray[i], string) == 0) {
                 count++;
                 found = 1;
-                // printf("Found!\n");
             }
         }
         found = 0;
@@ -242,21 +231,21 @@ int getFreq(char *url, char **wordArray, int size) {
 
 //normalise function - convert all characters to lowercase and remove punctuation marks
 void normalise(char *ch) {
-	int i;
-	char *tempChar, *tempStr;
-	//convert each word to lowercase
-	for (i = 0; i < strlen(ch); i++) {
-		ch[i] = tolower(ch[i]);
-	}
-	//remove ".", ",", "?", ";" characters
-	tempStr = tempChar = ch;
-	while (*tempStr) {
-		*tempChar = *tempStr++;
-       	if (*tempChar != '.' && *tempChar != ','  && *tempChar != ';'  && *tempChar != '?' && *tempChar != ' '){
-       		tempChar++;
-       	}
-	}
-	*tempChar = '\0'; 
+    int i;
+    char *tempChar, *tempStr;
+    //convert each word to lowercase
+    for (i = 0; i < strlen(ch); i++) {
+        ch[i] = tolower(ch[i]);
+    }
+    //remove ".", ",", "?", ";" characters
+    tempStr = tempChar = ch;
+    while (*tempStr) {
+        *tempChar = *tempStr++;
+        if (*tempChar != '.' && *tempChar != ','  && *tempChar != ';'  && *tempChar != '?' && *tempChar != ' '){
+            tempChar++;
+        }
+    }
+    *tempChar = '\0'; 
 }
 
 // orders array in terms of frequency and tfidf
@@ -281,9 +270,6 @@ void order(char **arr, double *tfidf, int *freq, int length) {
                 temp3 = arr[i];
                 arr[i] = arr[j];
                 arr[j] = temp3;
-                /*for (int g = 0; g < length; g++) {
-                    printf("%s  %.6f %d\n", arr[g], tfidf[g], freq[g]);
-                }*/
             }
             if (freq[i] == freq[j] && tfidf[i] < tfidf[j]) {
                 temp1 = freq[i];
