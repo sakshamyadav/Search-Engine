@@ -20,6 +20,7 @@
 
 #define MAX_PAGES 30
 #define MAX_LENGTH 2401
+#define MAX_URL 30
 
 // function prototypes
 int duplicates(char **str, char *in, int size);
@@ -105,18 +106,19 @@ int main(int argc, char *argv[]) {
 
     // so far calucalted frequency values and tf-idf and have urlArray
     /*for (int g = 0; g < totalURLs; g++) {
-        if (frequency[g] != 0) {
-            printf("%s  %.6f %d\n", urlArray[g], tfidf[g], frequency[g]);
-        }
-    }*/
+        printf("%s  %.6f %d\n", urlArray[g], tfidf[g], frequency[g]);
+    }
     
+    printf("\n");*/
+
     // ordering thingy goes here, order based on frequency first, then tfidf values
     order(urlArray, tfidf, frequency, totalURLs);
-    int final;
-    for (final = 0; final < totalURLs; final++) {
+    int final = 0;
+    while (final < MAX_URL && final < totalURLs) {
         if (frequency[final] != 0) {
             printf("%s  %.6f\n", urlArray[final], tfidf[final]);
         }
+        final++;
     }
 
     return 0;
@@ -202,7 +204,7 @@ double calculateIDF(char *word, int totalDocs) {
     // find total amount of documents
     // printf("TotalDocs: %d\n", totalDocs);
     if (nDocs > 0) {
-        double IDF = log10((float)totalDocs/nDocs); 
+        double IDF = log10((double)totalDocs/nDocs); 
         // printf("IDF: %lf\n", IDF);
         return IDF;
     }
@@ -257,30 +259,44 @@ void normalise(char *ch) {
 	*tempChar = '\0'; 
 }
 
-// orders array in specific order as requested, with extra sauce and no gravy
+// orders array in terms of frequency and tfidf
+// first move those with higher frequencies above the current index
+// order in descending order, those with higher frequencies are at top, lower at bottom
 void order(char **arr, double *tfidf, int *freq, int length) {
-    // order in descending order, those with higher frequencies are at top, lower at bottom
-   int i,j, temp, temp1;
-    char *temp2; 
-
-    for(i=0; i<length; i++){
-        for(j=i+1; j<length; j++){
-            if(freq[i]<freq[j]){
-                
+    int i, j, temp1;
+    double temp2;
+    char *temp3;
+    for (i = 0; i < length; i++) {
+        for (j = i + 1; j < length; j++) {
+            if (freq[i] < freq[j]) { // compare frequency
                 //swap frequency value
-                temp = freq[i];
+                temp1 = freq[i];
                 freq[i] = freq[j];
-                freq[j] = temp;
-
-                //swap URL name to maintain correct order
-                temp2 = arr[i];
-                arr[i] = arr[j];
-                arr[j] = temp2;
-
+                freq[j] = temp1;
                 // swap tfidf to maintain order
-                temp1 = tfidf[i];
+                temp2 = tfidf[i];
                 tfidf[i] = tfidf[j];
-                tfidf[j] = temp1;
+                tfidf[j] = temp2;
+                //swap URL name to maintain correct order
+                temp3 = arr[i];
+                arr[i] = arr[j];
+                arr[j] = temp3;
+                /*for (int g = 0; g < length; g++) {
+                    printf("%s  %.6f %d\n", arr[g], tfidf[g], freq[g]);
+                }*/
+            }
+            if (freq[i] == freq[j] && tfidf[i] < tfidf[j]) {
+                temp1 = freq[i];
+                freq[i] = freq[j];
+                freq[j] = temp1;
+                // swap tfidf to maintain order
+                temp2 = tfidf[i];
+                tfidf[i] = tfidf[j];
+                tfidf[j] = temp2;
+                //swap URL name to maintain correct order
+                temp3 = arr[i];
+                arr[i] = arr[j];
+                arr[j] = temp3;
             }
         }
     }
