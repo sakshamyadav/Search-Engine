@@ -1,5 +1,4 @@
-# ass2
-Comp2521 Assignment 2 - Search Engines 
+# Comp2521 Assignment 2 - Search Engines
 
 Part 1 A: (COMPLETE)
 Calculate Weighted PageRanks
