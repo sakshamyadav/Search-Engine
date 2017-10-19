@@ -154,5 +154,6 @@ void disposeGraph(Graph g){
         free(g->edges[i]);
     }
     free(g->edges);
+    free(g);
 }
 
