@@ -16,5 +16,5 @@ Part 3: (IN PROGRESS)
 Hybrid/Meta Search Engine using Scaled Footrule Rank Aggregation 
 
 
-
-
+https://github.com/hihellohi/cs1927ass2
+https://github.com/glen-mac/COMP1927-16s1/blob/master/scaledFootrule.c
