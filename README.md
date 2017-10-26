@@ -12,6 +12,6 @@ Simple Search Engine
 Part 2: (COMPLETE)
 Content-based Search Engine
 
-Part 3: (IN PROGRESS)
+Part 3: (COMPLETE)
 Hybrid/Meta Search Engine using Scaled Footrule Rank Aggregation 
 
