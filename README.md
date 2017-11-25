@@ -15,3 +15,5 @@ Content-based Search Engine
 Part 3: (COMPLETE)
 Hybrid/Meta Search Engine using Scaled Footrule Rank Aggregation 
 
+Final Mark: 14/15 (93.33%)
+
