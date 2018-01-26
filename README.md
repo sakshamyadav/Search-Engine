@@ -9,25 +9,32 @@ The pagerank.c file reads data from a given collection of pages in the file coll
  
 
  ![equation](https://latex.codecogs.com/gif.latex?M(p_i))
+ 
  Set containing nodes (urls) with outgoing links to ![equation](https://latex.codecogs.com/gif.latex?p_i) (ignore self-loops and parallel edges)
  
  ![equation](https://latex.codecogs.com/gif.latex?W_{(v,&space;u)}^{in}&space;=&space;\frac{I_u}{\sum_{p\epsilon&space;R(v)}^{&space;}I_p}) 
+ 
  Weight of *link(v,u)* calculated based on the number of inlinks of page u and the number of inlinks of all reference pages of page v.
 
 ![equation](https://latex.codecogs.com/gif.latex?I_u,&space;I_p)
+
 Represent the number of inlinks of page u
 and page p, respectively.
  
  ![equation](https://latex.codecogs.com/gif.latex?W_{(v,&space;u)}^{out}&space;=&space;\frac{O_u}{\sum_{p\epsilon&space;R(v)}^{&space;}O_p}) 
+ 
 Weight of *link(v, u)* calculated based on the number of outlinks of page u and the number of outlinks of all reference pages of page v.
 
 ![equation](https://latex.codecogs.com/gif.latex?O_u,&space;O_p)
+
 Represent the number of outlinks of page u and page p, respectively.
 
 ![equation](https://latex.codecogs.com/gif.latex?R(v))
+
 Denotes the reference page list of page v.
 
 ![equation](https://latex.codecogs.com/gif.latex?t,&space;(t&plus;1))
+
 Correspond to values of iterations.
 
 Refer to [Weighted PageRank Algorithm](https://www.cse.unsw.edu.au/~cs2521/17s2/ass/ass02/page1725348.pdf) for more information.
