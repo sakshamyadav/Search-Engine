@@ -21,4 +21,4 @@ PageRankW(d, diffPR, maxIterations){
 
 
 
-![equation](https://latex.codecogs.com/gif.latex?E=\int&space;dx)  
+(https://latex.codecogs.com/gif.latex?E=\int&space;dx)  
