@@ -1,19 +1,4 @@
-# Comp2521 Assignment 2 - Search Engines
+Part 1: Graph structure-based Search Engine
 
-Part 1 A: (COMPLETE)
-Calculate Weighted PageRanks
-
-Part 1 B: (COMPLETE)
-Inverted Index
-
-Part 1 C: (COMPLETE)
-Simple Search Engine
-
-Part 2: (COMPLETE)
-Content-based Search Engine
-
-Part 3: (COMPLETE)
-Hybrid/Meta Search Engine using Scaled Footrule Rank Aggregation 
-
-Final Mark: 14/15 (93.33%)
+The pagerank.c file reads data from a given collection of pages in the file collection.txt and builds a graph structure using Adjacency Matrix. Using the algorithm described below, we calculated the Weighted PageRank for every url in the file collection.txt. In this file, urls are separated by one or more spaces or/and new line character. Added suffix '.txt' to a url to obtain file name of the corresponding "web page". For example, file url24.txt contains the required information for url24. $f(x)=3x$
 
