@@ -128,9 +128,5 @@ where
 
 ![enter image description here](https://www.cse.unsw.edu.au/~cs2521/17s2/ass/ass02/scaled-footrule-example1.png)
  
-The final ranking is derived by finding possible values of position 'P' such that the scaled-footrule distance is minimum. There are many different ways to assign possible values for 'P'. In the above example P = [1, 3, 2, 5, 4]. Some other possible values are, P = [1, 2, 4, 3, 5], P = [5, 2, 1, 4, 3], P = [1, 2, 3, 4, 5], etc. For n = 5, possible alternatives are 5!. For n = 10, possible alternatives would be 10! - that is 3,628,800 alternatives. A very simple and obviously inefficient approach could use brute-force search and generate all possible alternatives, calculate scaled-footrule distance for each alternative, and find the alternative with minimum scaled-footrule distance.
-
- 
-
-
+The final ranking is derived by finding possible values of position 'P' such that the scaled-footrule distance is minimum. There are many different ways to assign possible values for 'P'. In the above example P = [1, 3, 2, 5, 4]. Some other possible values are, P = [1, 2, 4, 3, 5], P = [5, 2, 1, 4, 3], P = [1, 2, 3, 4, 5], etc. For n = 5, possible alternatives are 5!. For n = 10, possible alternatives would be 10! - that is 3,628,800 alternatives. 
 ----------
