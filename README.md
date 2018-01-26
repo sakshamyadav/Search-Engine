@@ -91,8 +91,6 @@ The inverse document frequency is given by
 where ![equation](https://latex.codecogs.com/gif.latex?N) is the total number of documents and ![equation](https://latex.codecogs.com/gif.latex?D) is the set of all documents.  
 
 
-----------
-
 Refer to [tf-idf ](https://en.wikipedia.org/wiki/Tf-idf) for more information on these calculations. 
 
 
