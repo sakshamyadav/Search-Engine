@@ -19,6 +19,6 @@ PageRankW(d, diffPR, maxIterations){
             While (iteration < maxIteration AND diff >= diffPR)
                 iteration++;
 
+\[p_i\]
 
 
-(https://latex.codecogs.com/gif.latex?E=\int&space;dx)  
